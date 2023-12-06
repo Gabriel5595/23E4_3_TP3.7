@@ -1,19 +1,60 @@
 package org.example;
 
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class Main {
-    public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+    public static void main(String[] args) throws IOException {
+//        URL urlObj = new URL("https://api.agify.io/?name=Gabriel");
+//        HttpURLConnection conexao = (HttpURLConnection)urlObj.openConnection();
+//        conexao.setRequestMethod("GET");
+//        int responseCode = conexao.getResponseCode();
+//        if(responseCode == HttpURLConnection.HTTP_OK) {
+//            BufferedReader in = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
+//            String inputLine;
+//            StringBuffer response = new StringBuffer();
+//
+//            while ((inputLine = in.readLine()) != null) {
+//                response.append(inputLine);
+//            } in.close();
+//
+//            JSONObject jsonObject = new JSONObject(response.toString());
+//            Entrada entrada = new Entrada();
+//            entrada.setCount(jsonObject.getInt("count"));
+//            entrada.setName(jsonObject.getString("name"));
+//            entrada.setAge(jsonObject.getInt("age"));
+//            System.out.println(entrada);
+//        } else {
+//            System.out.println("GET request did not work");
+//        }
 
-        // Press Shift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
 
-            // Press Shift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+        URL urlObj = new URL("https://api.agify.io/?name=Gabriel");
+        HttpURLConnection conexao = (HttpURLConnection)urlObj.openConnection();
+        conexao.setRequestMethod("GET");
+        int responseCode = conexao.getResponseCode();
+        if(responseCode == HttpURLConnection.HTTP_OK) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            } in.close();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            RespostaJSON respostaJSON = objectMapper.readValue(response.toString(), RespostaJSON.class);
+
+            System.out.println(respostaJSON.getName());
+        } else {
+            System.out.println("GET request did not work");
         }
     }
 }
